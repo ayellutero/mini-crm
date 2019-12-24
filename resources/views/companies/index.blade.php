@@ -1,5 +1,13 @@
 @extends('layouts.app')
 
+@section('styles')
+<style>
+#show-company-modal .company-logo {
+    max-width: -webkit-fill-available !important;
+}
+</style>
+@endsection
+
 @section('content')
 <div class="container-fluid">
     <div class="row justify-content-center">
@@ -15,7 +23,7 @@
                         </button>
                     </div>
                     @endif
-                    <a href="{{ route('companies.create') }}" class="btn btn-outline-primary mb-3 add-item-btn" data-toggle="tooltip" data-placement="bottom" title="Add Company">Add Company</a>
+                    <a href="{{ route('companies.create') }}" class="btn btn-sm btn-outline-primary mb-3 add-item-btn" data-toggle="tooltip" data-placement="bottom" title="Add Company">Add Company</a>
                     <table class="table text-left text-nowrap table-sm">
                         <thead>
                             <tr>
@@ -35,7 +43,8 @@
         </div>
     </div>
 </div>
-@include('companies.partials.add-modal')
+@include('companies.partials.delete-modal')
+@include('companies.partials.show-modal')
 @endsection
 
 @section('scripts')
@@ -43,14 +52,16 @@
 
 <!-- Template for actions column -->
 <script type="text/template" id="actions-tmpl">
-    <a href="#" class="btn py-0 action-btn" data-toggle="tooltip" data-placement="bottom" title="View"><i class="far fa-eye"></i></a>
-    <a href="#" class="btn py-0 action-btn" data-toggle="tooltip" data-placement="bottom" title="Edit"><i class="far fa-edit"></i></a>
-    <a href="#" class="btn py-0 action-btn" data-toggle="tooltip" data-placement="bottom" title="Delete"><i class="far fa-trash-alt"></i></a>
+<div data-id="<%= id %>" data-name="<%= name %>">
+    <a href="#" class="btn py-0 view-action-btn" data-toggle="tooltip" data-placement="bottom" title="View"><i class="far fa-eye"></i></a>
+    <a href="/companies/<%= id %>/edit" class="btn py-0 edit-action-btn" data-toggle="tooltip" data-placement="bottom" title="Edit"><i class="far fa-edit"></i></a>
+    <a href="#" class="btn py-0 delete-action-btn" data-toggle="tooltip" data-placement="bottom" title="Delete"><i class="far fa-trash-alt"></i></a>
+</div>
 </script>
 
 <!-- Template for logo column -->
 <script type="text/template" id="logo-tmpl">
-    <img class="logo-preview" src="/storage/<%= logo %>" alt="company-logo-preview" width=80/>
+    <% if (typeof(logo) === 'string') { %><img class="logo-preview" src="/storage/<%= logo %>" alt="company-logo-preview" width=80/><% } %>
 </script>
 
 <!-- Template for website column -->
@@ -96,7 +107,8 @@ $(document).ready(() => {
             {
                 data: (row) => {
                     return actions_tmpl({
-                        name: row.name
+                        name: row.name,
+                        id: row.id
                     });
                 },
                 sortable: false
@@ -108,12 +120,33 @@ $(document).ready(() => {
         }
     });
 
-    // $(document).on('click', '.add-item-btn', () => {
-    //     console.log('a')
-    //     var modal = $('#add-company-modal')
-    //     modal.modal('show')
-    // });
+    $(document).on('click', '.view-action-btn', (e) => {
+        var id = $(e.target).closest('div').data('id')
+        var modal = $('#show-company-modal')
+        $.ajax({
+            url: '/companies/' + id,
+            async: false,
+            type: "GET",
+            data: { id: id },
+            dataType: "json",
+            crossDomain: true,
+            contentType: 'application/json',
+            success: function(data) {
+                modal.html(data.html)
+                modal.modal('show')
+            }
+        });
+    });
 
+    $(document).on('click', '.delete-action-btn', (e) => {
+        var id = $(e.target).closest('div').data('id')
+        var name = $(e.target).closest('div').data('name')
+        var modal = $('#delete-company-modal')
+
+        modal.find('.company-name').text(name);
+        modal.find('form').attr('action', window.location.origin + '/companies/' + id);
+        modal.modal('show')
+    });
 });
 </script>
 @endsection

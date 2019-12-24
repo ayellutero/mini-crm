@@ -5,6 +5,8 @@ namespace App\Http\Controllers\API;
 use App\Company;
 use App\Http\Controllers\Controller;
 use App\Utilities\DataTable;
+use Exception;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 
 class CompaniesController extends Controller
@@ -14,13 +16,26 @@ class CompaniesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function getCompanies()
     {
-        $companies = Company::all();
-        return response()->json([
-            'success' => true,
-            'companies' => $companies
-        ]);
+        try {
+            $companies = Company::all();
+            return response()->json([
+                'success' => true,
+                'companies' => $companies
+            ]);    
+
+        } catch (QueryException $e) {
+            $error = $e->getMessage();
+        } catch (Exception $e) {
+            $error = $e->getMessage();
+        }
+
+        return [
+            'success' => false,
+            'message' => $error
+        ];
+        
     }
 
     /**
@@ -50,9 +65,25 @@ class CompaniesController extends Controller
      * @param  \App\Company  $company
      * @return \Illuminate\Http\Response
      */
-    public function show(Company $company)
+    public function getCompany(Request $request)
     {
-        //
+        try {
+            $id = $request->id;
+            $company = Company::find($id);
+            return response()->json([
+                'success' => true,
+                'company' => $company
+            ]);    
+        } catch (QueryException $e) {
+            $error = $e->getMessage();
+        } catch (Exception $e) {
+            $error = $e->getMessage();
+        }
+
+        return [
+            'success' => false,
+            'message' => $error
+        ];
     }
 
     /**

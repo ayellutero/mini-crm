@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Company;
 use App\Http\Requests\CompanyRequest;
+use Exception;
 use Illuminate\Http\Request;
 
 class CompaniesController extends Controller
@@ -36,16 +37,16 @@ class CompaniesController extends Controller
      */
     public function store(CompanyRequest $request)
     {
-
-        // dd(Company::find(1));
         $data = $request->all();
 
-        // get the file name to be used after storing file in storage/app/public
-        $filename = $request->file('logo')->hashName();
-        // Store the contents to the storage/app/public
-        $request->file('logo')->store('public');
-        
-        $data['logo'] = $filename;
+        if ($request->hasFile('logo')) {
+            // get the file name to be used after storing file in storage/app/public
+            $filename = $request->file('logo')->hashName();
+            // Store the contents to the storage/app/public
+            $request->file('logo')->store('public');
+            
+            $data['logo'] = $filename;
+        }
         
         // if Company is successfully created,
         if (Company::create($data)) {
@@ -73,9 +74,28 @@ class CompaniesController extends Controller
      * @param  \App\Company  $company
      * @return \Illuminate\Http\Response
      */
-    public function show(Company $company)
+    public function show($id)
     {
-        //
+        try {
+
+            $company = Company::find($id);
+            // render partial page to be used in a modal for viewing company information
+            $html = \View::make('companies.partials.show-modal-content', compact('company'))->render();
+
+            return  [
+                'success' => true,
+                'html' => $html,
+            ];
+        } catch (Exception $e) {
+            $message = $e->getMessage();
+            return  [
+                'success' => false,
+            ];
+        }
+
+        return  [
+            'success' => false,
+        ];
     }
 
     /**
@@ -84,9 +104,10 @@ class CompaniesController extends Controller
      * @param  \App\Company  $company
      * @return \Illuminate\Http\Response
      */
-    public function edit(Company $company)
+    public function edit($id)
     {
-        //
+        $company = Company::find($id);
+        return view('companies.edit', compact('company'));
     }
 
     /**
@@ -96,9 +117,42 @@ class CompaniesController extends Controller
      * @param  \App\Company  $company
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Company $company)
+    public function update(CompanyRequest $request, $id)
     {
-        //
+        $data = $request->all();
+
+        // dd($data['old_logo']);
+        if ($request->hasFile('logo')) {
+            // get the file name to be used after storing file in storage/app/public
+            $filename = $request->file('logo')->hashName();
+            // Store the contents to the storage/app/public
+            $request->file('logo')->store('public');
+            
+            $data['logo'] = $filename;
+        } else if (!isset($data['old_logo'])) {
+            // if there's no uploaded file and old logo was removed
+            $data['logo'] = null;            
+        }
+        
+        // dd($data);
+        // if Company is successfully updated,
+        if (Company::find($id)->update($data)) {
+            // redirect to Companies index page
+            return redirect()->route('companies.index')->with(
+                'message', [
+                    'status' => 'success',
+                    'text' => 'Successfully updated company details.'
+                ]
+            );
+        }
+
+        // else redirect back to create form
+        return redirect()->back()->with(
+            'message', [
+                'status' => 'danger',
+                'text' => 'There was an error saving your data. Please try again.'
+            ]
+        );
     }
 
     /**
@@ -107,8 +161,24 @@ class CompaniesController extends Controller
      * @param  \App\Company  $company
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Company $company)
+    public function destroy($id)
     {
-        //
+        $company = Company::find($id);
+
+        if($company->delete()) {
+            return redirect()->route('companies.index')->with(
+               'message', [
+                'status' => 'success',
+                'text' => 'Successfully deleted data.'
+                ]
+            ); 
+        }
+
+        return redirect('companies.index')->with(
+            'message', [
+                'status' => 'danger',
+                'text' => 'There was an error deleting your data. Please try again.'
+            ]
+        ); 
     }
 }

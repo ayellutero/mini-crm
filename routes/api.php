@@ -18,10 +18,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::namespace('API')->group(function() {
-    Route::get('companies', 'CompaniesController@index');
     Route::get('companies_dt', 'CompaniesController@getData');
 
-    Route::get('employees', 'EmployeesController@index');
     Route::get('employees_dt', 'EmployeesController@getData');
 
     

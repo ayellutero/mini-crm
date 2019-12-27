@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests;
 
-use App\User;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CompanyRequest extends FormRequest
@@ -14,7 +13,7 @@ class CompanyRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;//User::where('id', \Auth::id())->exists();
+        return true;
     }
 
     /**

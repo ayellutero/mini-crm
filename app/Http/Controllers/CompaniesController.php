@@ -107,7 +107,18 @@ class CompaniesController extends Controller
     public function edit($id)
     {
         $company = Company::find($id);
-        return view('companies.edit', compact('company'));
+
+        if ($company) {
+            return view('companies.edit', compact('company'));
+        }
+
+        // else redirect back to index
+        return redirect()->route('companies.index')->with(
+            'message', [
+                'status' => 'danger',
+                'text' => 'Company not found.'
+            ]
+        ); 
     }
 
     /**
@@ -120,39 +131,48 @@ class CompaniesController extends Controller
     public function update(CompanyRequest $request, $id)
     {
         $data = $request->all();
+        $company = Company::find($id);
 
-        // dd($data['old_logo']);
-        if ($request->hasFile('logo')) {
-            // get the file name to be used after storing file in storage/app/public
-            $filename = $request->file('logo')->hashName();
-            // Store the contents to the storage/app/public
-            $request->file('logo')->store('public');
+        if($company) {
+            if ($request->hasFile('logo')) {
+                // get the file name to be used after storing file in storage/app/public
+                $filename = $request->file('logo')->hashName();
+                // Store the contents to the storage/app/public
+                $request->file('logo')->store('public');
+                
+                $data['logo'] = $filename;
+            } else if (!isset($data['old_logo'])) {
+                // if there's no uploaded file and old logo was removed
+                $data['logo'] = null;            
+            }
             
-            $data['logo'] = $filename;
-        } else if (!isset($data['old_logo'])) {
-            // if there's no uploaded file and old logo was removed
-            $data['logo'] = null;            
-        }
-        
-        // dd($data);
-        // if Company is successfully updated,
-        if (Company::find($id)->update($data)) {
-            // redirect to Companies index page
-            return redirect()->route('companies.index')->with(
+            // if Company is successfully updated,
+            if (Company::find($id)->update($data)) {
+                // redirect to Companies index page
+                return redirect()->route('companies.index')->with(
+                    'message', [
+                        'status' => 'success',
+                        'text' => 'Successfully updated company details.'
+                    ]
+                );
+            }
+
+            // else redirect back to create form
+            return redirect()->back()->with(
                 'message', [
-                    'status' => 'success',
-                    'text' => 'Successfully updated company details.'
+                    'status' => 'danger',
+                    'text' => 'There was an error saving your data. Please try again.'
                 ]
-            );
+            );    
         }
 
-        // else redirect back to create form
-        return redirect()->back()->with(
+        // else redirect back to index
+        return redirect()->route('companies.index')->with(
             'message', [
                 'status' => 'danger',
-                'text' => 'There was an error saving your data. Please try again.'
+                'text' => 'Company not found.'
             ]
-        );
+        ); 
     }
 
     /**
@@ -165,19 +185,29 @@ class CompaniesController extends Controller
     {
         $company = Company::find($id);
 
-        if($company->delete()) {
-            return redirect()->route('companies.index')->with(
-               'message', [
-                'status' => 'success',
-                'text' => 'Successfully deleted data.'
+        if($company) {
+                if($company->delete()) {
+                return redirect()->route('companies.index')->with(
+                'message', [
+                    'status' => 'success',
+                    'text' => 'Successfully deleted data.'
+                    ]
+                ); 
+            }
+
+            return redirect('companies.index')->with(
+                'message', [
+                    'status' => 'danger',
+                    'text' => 'There was an error deleting your data. Please try again.'
                 ]
             ); 
         }
 
-        return redirect('companies.index')->with(
+        // else redirect back to index
+        return redirect()->route('companies.index')->with(
             'message', [
                 'status' => 'danger',
-                'text' => 'There was an error deleting your data. Please try again.'
+                'text' => 'Company not found.'
             ]
         ); 
     }

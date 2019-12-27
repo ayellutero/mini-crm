@@ -50,7 +50,7 @@ return [
         'employee' => [
             'driver' => 'session',
             'provider' => 'employee',
-            'customRedirect' => 'employee.home'
+            'customRedirect' => 'e.home'
         ],
     ],
 

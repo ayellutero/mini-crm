@@ -43,8 +43,8 @@
         </div>
     </div>
 </div>
-@include('companies.partials.delete-modal')
-@include('companies.partials.show-modal')
+@include('partials.delete-modal')
+@include('partials.show-modal')
 @endsection
 
 @section('scripts')
@@ -122,7 +122,7 @@ $(document).ready(() => {
 
     $(document).on('click', '.view-action-btn', (e) => {
         var id = $(e.target).closest('div').data('id')
-        var modal = $('#show-company-modal')
+        var modal = $('#show-item-modal')
         $.ajax({
             url: '/companies/' + id,
             async: false,
@@ -141,9 +141,9 @@ $(document).ready(() => {
     $(document).on('click', '.delete-action-btn', (e) => {
         var id = $(e.target).closest('div').data('id')
         var name = $(e.target).closest('div').data('name')
-        var modal = $('#delete-company-modal')
+        var modal = $('#delete-item-modal')
 
-        modal.find('.company-name').text(name);
+        modal.find('.item-name').text(name);
         modal.find('form').attr('action', window.location.origin + '/companies/' + id);
         modal.modal('show')
     });

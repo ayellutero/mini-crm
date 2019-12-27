@@ -19,7 +19,7 @@ Auth::routes(['register' => false]);
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::namespace('Auth')->name('employee.')->prefix('employee')->group(function() {
+Route::namespace('Auth')->name('e.')->prefix('e')->group(function() {
     Route::get('home', 'EmployeeHomeController@index')->name('home');
     Route::get('login', 'EmployeeLoginController@showLoginForm')->name('login');
     Route::post('login', 'EmployeeLoginController@login')->name('login');
@@ -30,3 +30,5 @@ Route::resources([
     'companies' => 'CompaniesController',
     'employees' => 'EmployeesController',
 ]);
+
+Route::get('filter_employees', 'EmployeesController@filterTable');

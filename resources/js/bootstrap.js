@@ -21,9 +21,9 @@ try {
 window.axios = require('axios');
 
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
-// window.select2 = require('../../node_modules/select2/dist/js/select2.full');
+window.select2 = require('../../node_modules/select2/dist/js/select2.full');
 window.dt = require('datatables.net-bs4');
-window._ = require('underscore')
+window._ = require('underscore');
 
 
 /**

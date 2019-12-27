@@ -27,6 +27,7 @@
         "datatables.net": "^1.10.20",
         "datatables.net-bs4": "^1.10.20",
         "font-awesome": "^4.7.0",
+        "select2": "^4.0.12",
         "underscore": "^1.9.1"
     }
 }

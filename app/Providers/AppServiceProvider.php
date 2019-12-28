@@ -23,6 +23,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        \Validator::extend('employees_import', function($attribute, $value, $parameters) {
+            $extenstion = $value->getClientOriginalExtension();
+            $valid = [
+                'xlsx', 'csv'
+            ];
+
+            return in_array($extenstion, $valid);
+        });
     }
 }

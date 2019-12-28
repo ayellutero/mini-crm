@@ -23,7 +23,7 @@
                         </button>
                     </div>
                     @endif
-                    <a href="{{ route('companies.create') }}" class="btn btn-sm btn-outline-primary mb-3 add-item-btn" data-toggle="tooltip" data-placement="bottom" title="Add Company">Add Company</a>
+                    <a href="{{ route('companies.create') }}" class="btn btn-outline-primary mb-3 add-item-btn" data-toggle="tooltip" data-placement="bottom" title="Add Company">Add Company</a>
                     <div class="row">
                         <div class="col-4 d-flex justify-content-start">
                             <div class="py-2 form-inline">

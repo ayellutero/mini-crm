@@ -66,6 +66,35 @@
                                 @endforeach
                             </select>
                         </div>
+                        <div class="col-12 d-flex justify-content-center">
+                            <div class="col">
+                                <hr>
+                            </div>
+                            <div class="flex-shrink-1 mt-1">
+                                <label class="text-small font-weight-bold">OR</label>
+                            </div>
+                            <div class="col">
+                                <hr>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-6 px-0">
+                            <label class="text-small font-weight-bold m-0">Spreadsheet file</label>
+                            <label><small>Note: File will be prioritized over a single input in the above form.</small></label>
+                            <div class="input-group custom-file-container">
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input @error('file_import') is-invalid @enderror" name="file_import" accept=".xlsx, .csv">
+                                    <label class="custom-file-label">Choose file</label>
+                                </div>
+                                <div class="input-group-append remove-file-container d-none">
+                                    <button class="btn remove-file-btn" type="button"><i class="fas fa-times text-danger"></i></button>
+                                </div>
+                            </div>
+                            @error('file_import')
+                                <span class="custom-invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
                         <hr class="mt-4">
                         <div class="text-center">
                             <a href="{{ route('employees.index') }}" class="btn btn-outline-secondary">Cancel</a>
@@ -83,6 +112,14 @@
 <script defer>
 $(document).ready(() => {
     $('select').select2();
+    $(document).on('change', '.custom-file-input', (e) => {
+        var el = $(e.target);
+        if(el[0].files.length === 0) {
+            $('.remove-file-container').addClass('d-none');
+        } else {
+            $('.remove-file-container').removeClass('d-none');
+        }
+    });
 });
 </script>
 @endsection

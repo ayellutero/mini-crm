@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Company;
 use App\Employee;
 use App\Http\Requests\EmployeeRequest;
+use App\Imports\EmployeesImport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -54,6 +55,53 @@ class EmployeesController extends Controller
     {
         $data = $request->all();
 
+        if ($request->hasFile('file_import')) {
+            try {
+                $new_employees = \Excel::toArray(new EmployeesImport, $request->file('file_import'));
+
+                foreach($new_employees as $employee) {
+                    foreach ($employee as $row) {
+                        if (isset($row[2])) { // company name is not null
+                            if (Company::whereName($row[2])->exists()) { // if company name exists,
+                                // get id of company
+                                $row[2] = Company::whereName($row[2])->pluck('id')->first();
+                            } else { // company does not exist in records yet
+                                $company = Company::create([
+                                    'name' => $row[2]
+                                ]);
+
+                                $row[2] = $company->id;
+                            }
+                        }
+
+                        // create new employee from row data,
+                        Employee::create([
+                            'first_name' => $row[0],
+                            'last_name' => $row[1],
+                            'company_id' => $row[2],
+                            'email' => $row[3],
+                            'phone' => $row[4]
+                        ]);
+                    }
+                }
+
+                return redirect()->route('employees.index')->with(
+                    'message', [
+                        'status' => 'success',
+                        'text' => 'Successfully created new employees.'
+                    ]
+                );
+
+            } catch (\Exception $e) {
+                return redirect()->back()->with(
+                    'message', [
+                        'status' => 'danger',
+                        'text' => 'There was an error reading your file. Please try again.'
+                    ]
+                );
+            }
+        }
+
         // if Employee is successfully created,
         if (Employee::create($data)) {
             // redirect to Employees index page
@@ -91,7 +139,7 @@ class EmployeesController extends Controller
                 'success' => true,
                 'html' => $html,
             ];
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $message = $e->getMessage();
             return  [
                 'success' => false,
@@ -245,7 +293,7 @@ class EmployeesController extends Controller
                 'success' => true,
                 'html' => route('employees.index', $data),
             ];
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $message = $e->getMessage();
             return  [
                 'success' => false,

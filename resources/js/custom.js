@@ -55,7 +55,4 @@ $(document).ready(() => {
             $('.logo-preview-container').addClass('d-none');
         }
     }
-
-    
-
 });

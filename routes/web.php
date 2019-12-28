@@ -32,3 +32,4 @@ Route::resources([
 ]);
 
 Route::get('filter_employees', 'EmployeesController@filterTable');
+Route::get('filter_companies', 'CompaniesController@filterTable');

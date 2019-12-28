@@ -24,20 +24,49 @@
                     </div>
                     @endif
                     <a href="{{ route('companies.create') }}" class="btn btn-sm btn-outline-primary mb-3 add-item-btn" data-toggle="tooltip" data-placement="bottom" title="Add Company">Add Company</a>
-                    <table class="table text-left text-nowrap table-sm">
-                        <thead>
-                            <tr>
-                                <th class="text-left">Company</th>
-                                <th class="text-left">Email</th>
-                                <th class="text-left">Logo</th>
-                                <th class="text-left">Website</th>
-                                <th class="text-right"></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            
-                        </tbody>
-                    </table>
+                    <div class="row">
+                        <div class="col-4 d-flex justify-content-start">
+                            <div class="py-2 form-inline">
+                                <span class="text-small pr-2 ">Show </span>
+                                <input type="number" class="form-control w-25 rounded tbl-pages" id="tbl-pages" name="page" placeholder="Page" min=10 step=5 value="{{ request()->get('pages') ? request()->get('pages') : 10 }}">
+                                <span class="text-small pl-2 "> entries </span>
+                            </div>
+                        </div>
+                        <div class="col-8 d-flex justify-content-end">
+                            <div>
+                                <span class="text-small pr-2 ">Sort by column</span>
+                                <select class="custom-select form-control tbl-sort-column" name="column">
+                                    @foreach($columns as $item)
+                                        <option value="{{ $item }}" @if(request()->get('column') && request()->get('column') === $item) selected @endif>{{ ucwords(str_replace(['_', 'id'], ' ', $item)) }}</option>
+                                    @endforeach
+                                </select>
+                                <div class="col-12 p-0">
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input rounded-0 tbl-sort-order" type="radio" name="order" value="asc" checked>
+                                        <label class="form-check-label">Ascending</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input tbl-sort-order" type="radio" name="order"value="desc" @if(request()->get('order') && request()->get('order') === 'desc') checked @endif>
+                                        <label class="form-check-label ">Descending</label>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="px-2">
+                                <span class="text-small pr-2 ">Search by keyword</span>
+                                <div class="input-group mb-3">
+                                    <input type="text" class="form-control rounded tbl-keyword-search" id="tbl-keyword-search" name="keyword" placeholder="Type keyword" maxlength=250 value="{{ request()->get('keyword') }}">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-primary rounded mx-2 tbl-filter-btn" type="submit" id="tbl-filter-btn">Apply</button>
+                                        <a href="{{ route('companies.index') }}" class="btn btn-outline-primary rounded tbl-filter-btn" xid="tbl-reset-btn">Reset</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-container">
+                    @include('companies.partials.datatable')
+                    </div>
                 </div>
             </div>
         </div>
@@ -48,76 +77,42 @@
 @endsection
 
 @section('scripts')
-<script src="{{ asset('js/dt-pipeline.js') }}"></script>
-
-<!-- Template for actions column -->
-<script type="text/template" id="actions-tmpl">
-<div data-id="<%= id %>" data-name="<%= name %>">
-    <a href="#" class="btn py-0 view-action-btn" data-toggle="tooltip" data-placement="bottom" title="View"><i class="far fa-eye"></i></a>
-    <a href="/companies/<%= id %>/edit" class="btn py-0 edit-action-btn" data-toggle="tooltip" data-placement="bottom" title="Edit"><i class="far fa-edit"></i></a>
-    <a href="#" class="btn py-0 delete-action-btn" data-toggle="tooltip" data-placement="bottom" title="Delete"><i class="far fa-trash-alt"></i></a>
-</div>
-</script>
-
-<!-- Template for logo column -->
-<script type="text/template" id="logo-tmpl">
-    <% if (typeof(logo) === 'string') { %><img class="logo-preview" src="/storage/<%= logo %>" alt="company-logo-preview" width=80/><% } %>
-</script>
-
-<!-- Template for website column -->
-<script type="text/template" id="website-tmpl">
-    <a target="_blank" href="<%= website %>"><%= website %></a>
-</script>
-
 <script defer>
 $(document).ready(() => {
-    var actions_tmpl = _.template($('#actions-tmpl').html());
-    var logo_tmpl = _.template($('#logo-tmpl').html());
-    var website_tmpl = _.template($('#website-tmpl').html());
-
-    var table = $('.table').DataTable( {
+    var table = $('.table').DataTable({
         processing: true,
-        serverSide: true,
-        ajax: $.fn.dataTable.pipeline( {
-            url: '/api/companies_dt',
-        }),
-        columns: [
-            {
-                data: 'name'
+        info: false,
+        ordering: false,
+        paging: false,
+        searching: false
+    });
+
+    $(document).on('click', '.tbl-filter-btn', function (e) {
+        var sort_col = $('.tbl-sort-column').val();
+        var sort_order = $('.tbl-sort-order:checked').val();
+        var keyword = $('.tbl-keyword-search').val();
+        var pages = $('.tbl-pages').val();
+
+        $.ajax({
+            url: '/filter_companies',
+            async: false,
+            type: "GET",
+            dataType: "json",
+            data: {
+                column: sort_col,
+                order: sort_order,
+                keyword: keyword,
+                pages: pages
             },
-            {
-                data: 'email'
+            crossDomain: true,
+            contentType: 'application/json',
+            success: function(data) {
+                window.location = data.html;
             },
-            {
-                data: (row) => {
-                    return logo_tmpl({
-                        logo: row.logo
-                    });
-                },
-                sortable: false
-            },
-            {
-                data: (row) => {
-                    return website_tmpl({
-                        website: row.website
-                    });
-                },
-                sortable: false
-            },
-            {
-                data: (row) => {
-                    return actions_tmpl({
-                        name: row.name,
-                        id: row.id
-                    });
-                },
-                sortable: false
+            error: function (data) {
+                console.log('error')
             }
-        ],
-        language: {
-            search: '',
-            searchPlaceholder: 'Search'
-        }
+        });
     });
 
     $(document).on('click', '.view-action-btn', (e) => {

@@ -14,9 +14,21 @@ class CompaniesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return view('companies.index');
+        if(!empty($request->all())) {
+            $data = $request->all();
+            $pages = isset($data['pages']) ? $data['pages'] : 10;
+            $companies = Company::filter($data)->paginate($pages);
+            $companies->withPath(preg_replace('/&page=[0-9]*/', '', request()->getRequestUri()));
+        } else {
+            $companies = Company::orderBy('name')->paginate(10);
+        }
+        $columns = (new Company)->getSortableDT();
+        return view('companies.index', compact(
+            'companies',
+            'columns'
+        ));
     }
 
     /**
@@ -210,5 +222,30 @@ class CompaniesController extends Controller
                 'text' => 'Company not found.'
             ]
         ); 
+    }
+
+    /**
+     * 
+     * filter data in index table 
+     * 
+     */
+    public function filterTable(Request $request)
+    {
+        try {
+            $data = $request->all();
+            return  [
+                'success' => true,
+                'html' => route('companies.index', $data),
+            ];
+        } catch (Exception $e) {
+            $message = $e->getMessage();
+            return  [
+                'success' => false,
+            ];
+        }
+
+        return  [
+            'success' => false,
+        ];
     }
 }

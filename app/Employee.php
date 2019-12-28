@@ -32,6 +32,13 @@ class Employee extends Authenticatable
         'phone'
     ];
 
+    protected $searchable_dt = [
+        'last_name',
+        'first_name',
+        'email',
+        'phone'
+    ];
+
     protected $hidden = [
         'password', 'remember_token',
     ];
@@ -62,11 +69,11 @@ class Employee extends Authenticatable
     }
 
     public function scopeFilter($query, $data)
-     {
+    {
         $sort_col = isset($data['column']) ? $data['column'] : 'last_name';
         $sort_order = isset($data['order']) ? $data['order'] : 'asc';
         $keyword = isset($data['keyword']) ? $data['keyword'] : '';
-        $columns = $this->sortable_dt;
+        $columns = $this->searchable_dt;
 
         return $query->where(function ($q) use ($columns, $keyword)  {
             foreach($columns as $col) {
@@ -76,6 +83,6 @@ class Employee extends Authenticatable
         ->orWhereHas('company', function ($q) use ($keyword) {
             $q->where('name', $keyword);
         })->orderBy($sort_col, $sort_order);
-     }
+    }
 
 }

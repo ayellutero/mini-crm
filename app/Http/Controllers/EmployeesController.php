@@ -231,14 +231,16 @@ class EmployeesController extends Controller
         
     }
 
+    /**
+     * 
+     * filter data in index table 
+     * 
+     */
     public function filterTable(Request $request)
     {
         
         try {
             $data = $request->all();
-
-            $employees = Employee::filter($data)->paginate($data['pages']);
-
             return  [
                 'success' => true,
                 'html' => route('employees.index', $data),

@@ -6,7 +6,6 @@
         <div class="col-md-10">
             <div class="card">
                 <div class="card-header">Employees</div>
-
                 <div class="card-body">
                     @if(Session::has('message'))
                     <div class="alert alert-{{ Session::get('message.status') }} alert-dismissible fade show" role="alert">
@@ -70,28 +69,9 @@
 @endsection
 
 @section('scripts')
-<script src="{{ asset('js/dt-pipeline.js') }}"></script>
-
-<!-- Template for actions column -->
-<script type="text/template" id="actions-tmpl">
-<div data-id="<%= id %>" data-name="<%= name %>">
-    <a href="#" class="btn py-0 view-action-btn" data-toggle="tooltip" data-placement="bottom" title="View"><i class="far fa-eye"></i></a>
-    <a href="/employees/<%= id %>/edit" class="btn py-0 edit-action-btn" data-toggle="tooltip" data-placement="bottom" title="Edit"><i class="far fa-edit"></i></a>
-    <a href="#" class="btn py-0 delete-action-btn" data-toggle="tooltip" data-placement="bottom" title="Delete"><i class="far fa-trash-alt"></i></a>
-</div>
-</script>
-
-<!-- Template for company column -->
-<script type="text/template" id="company-tmpl">
-<span><%= company %></span>
-</script>
-
 <script defer>
 $(document).ready(function() {
-    var actions_template = _.template($('#actions-tmpl').html());
-    var company_template = _.template($('#company-tmpl').html());
-
-     table = $('.table').DataTable({
+    var table = $('.table').DataTable({
         processing: true,
         info: false,
         ordering: false,

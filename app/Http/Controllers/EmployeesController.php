@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Company;
 use App\Employee;
+use App\Exports\EmployeesExport;
 use App\Http\Requests\EmployeeRequest;
 use App\Imports\EmployeesImport;
 use Illuminate\Http\Request;
@@ -27,10 +28,12 @@ class EmployeesController extends Controller
             $employees = Employee::orderBy('last_name')->paginate(10);
         }
         $columns = (new Employee)->getSortableDT();
+        $companies = Company::orderBy('name')->get();
         
         return view('employees.index', compact(
             'employees',
-            'columns'
+            'columns',
+            'companies'
         ));
     }
 
@@ -304,5 +307,22 @@ class EmployeesController extends Controller
             'success' => false,
         ];
         
+    }
+
+    /**
+     * For exporting employees data
+     */
+    public function export(Request $request)
+    {
+        $data = $request->all();
+
+        // check what type of data the user selected
+        if ($data['export_type'] === 'all') {
+            $export = new EmployeesExport(Employee::export()->get());
+        } else {
+            $export = new EmployeesExport(Employee::export($data['export_companies'])->get());
+        }
+    
+        return \Excel::download($export, 'employees.' . $data['file_type']);
     }
 }

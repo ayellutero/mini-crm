@@ -76,13 +76,27 @@ class Employee extends Authenticatable
         $columns = $this->searchable_dt;
 
         return $query->where(function ($q) use ($columns, $keyword)  {
-            foreach($columns as $col) {
+            foreach($columns as $col) { // foreach defined searchable column,
+                // search for the given keyword
                 $q = $q->orWhere($col, 'LIKE', '%'. $keyword .'%' );
             }
         })
         ->orWhereHas('company', function ($q) use ($keyword) {
+            // include company name (if employee has company) in searching for the keyword
             $q->where('name', $keyword);
         })->orderBy($sort_col, $sort_order);
     }
 
+    public function scopeExport($query, $data = null)
+    {
+        $query->join('companies as c', 'company_id', '=', 'c.id');
+
+        if (isset($data)) { // if user chose to export employees of specific companies
+            $query->whereIn('company_id', $data);
+        }
+
+        return $query->select('first_name', 'last_name', 'name as company', 'employees.email', 'phone')
+                ->orderBy('name')
+                ->orderBy('last_name');
+    }
 }

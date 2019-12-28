@@ -16,6 +16,7 @@
                     </div>
                     @endif
                     <a href="{{ route('employees.create') }}" class="btn btn-outline-primary mb-3 add-item-btn" data-toggle="tooltip" data-placement="bottom" title="Add Employee">Add Employee</a>
+                    <button type="button" class="btn btn-outline-primary mb-3" data-toggle="modal" data-target="#export-employees-modal">Export Data</button>
                     <div class="row">
                         <div class="col-4 d-flex justify-content-start">
                             <div class="py-2 form-inline">
@@ -66,6 +67,7 @@
 </div>
 @include('partials.delete-modal')
 @include('partials.show-modal')
+@include('employees.partials.export-modal')
 @endsection
 
 @section('scripts')
@@ -133,6 +135,27 @@ $(document).ready(function() {
         modal.find('.item-name').text(name);
         modal.find('form').attr('action', window.location.origin + '/employees/' + id);
         modal.modal('show')
+    });
+
+    $('.export-companies').select2({
+        multiple: true,
+        allowClear: true,
+        placeholder: 'Select companies'
+    });
+
+    $(document).on('change', 'input[name=export_type]', function () {
+        var type = $('input[name=export_type]:checked').val();
+        if (type === "all") {
+            $('div.export-companies-container').addClass('d-none');
+            $('div.export-companies').attr('disabled', 'disabled');
+        } else {
+            $('div.export-companies-container').removeClass('d-none');
+            $('.export-companies').removeAttr('disabled');
+        }
+    });
+
+    $('.export-employees-btn').on('click', () => {
+        $('#export-employees-modal').modal('hide');
     });
 
 });

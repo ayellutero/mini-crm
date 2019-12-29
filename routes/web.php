@@ -31,4 +31,12 @@ Route::resources([
     'employees' => 'EmployeesController',
 ]);
 
+Route::resource('emails', 'EmailsController')->only([
+    'create'
+]);
+
 Route::get('export_employees', 'EmployeesController@export')->name('employees.export');
+Route::post('/emails/send', 'EmailsController@send')->name('emails.send');
+Route::get('/emails', function () {
+    return view('emails.template');
+});

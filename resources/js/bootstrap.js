@@ -24,6 +24,13 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 window.select2 = require('../../node_modules/select2/dist/js/select2.full');
 window.dt = require('datatables.net-bs4');
 window._ = require('underscore');
+window.flatpicker = require('flatpickr');
+
+import minMaxTimePlugin from 'flatpickr/dist/plugins/minMaxTimePlugin.js';
+window.minMaxTimePlugin = minMaxTimePlugin;
+
+import confirmDatePlugin from 'flatpickr/dist/plugins/confirmDate/confirmDate.js';
+window.confirmDatePlugin = confirmDatePlugin;
 
 
 /**

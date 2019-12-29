@@ -26,6 +26,7 @@
     @endforeach
     </tbody>
 </table>
-<div class="col-12 d-flex justify-content-center">
-{{ $companies->links() }}
+<hr class="mt-2">
+<div class="col-12 d-flex p-0">
+{{ isset($filters) ? $companies->appends($filters)->links() : $companies->links() }}
 </div>

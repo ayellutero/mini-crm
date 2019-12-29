@@ -15,48 +15,50 @@
                         </button>
                     </div>
                     @endif
-                    <a href="{{ route('employees.create') }}" class="btn btn-outline-primary mb-3 add-item-btn" data-toggle="tooltip" data-placement="bottom" title="Add Employee">Add Employee</a>
+                    <a href="{{ route('employees.create') }}" class="btn btn-outline-primary mb-3 mr-1 add-item-btn" data-toggle="tooltip" data-placement="bottom" title="Add Employee">Add Employee</a>
                     <button type="button" class="btn btn-outline-primary mb-3" data-toggle="modal" data-target="#export-employees-modal">Export Data</button>
-                    <div class="row">
-                        <div class="col-4 d-flex justify-content-start">
-                            <div class="py-2 form-inline">
-                                <span class="text-small pr-2 ">Show </span>
-                                <input type="number" class="form-control w-25 rounded tbl-pages" id="tbl-pages" name="page" placeholder="Page" min=10 step=5 value="{{ request()->get('pages') ? request()->get('pages') : 10 }}">
-                                <span class="text-small pl-2 "> entries </span>
-                            </div>
-                        </div>
-                        <div class="col-8 d-flex justify-content-end">
-                            <div>
-                                <span class="text-small pr-2 ">Sort by column</span>
-                                <select class="custom-select form-control tbl-sort-column" name="column">
-                                    @foreach($columns as $item)
-                                        <option value="{{ $item }}" @if(request()->get('column') && request()->get('column') === $item) selected @endif>{{ ucwords(str_replace(['_', 'id'], ' ', $item)) }}</option>
-                                    @endforeach
-                                </select>
-                                <div class="col-12 p-0">
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input rounded-0 tbl-sort-order" type="radio" name="order" value="asc" checked>
-                                        <label class="form-check-label">Ascending</label>
-                                    </div>
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input tbl-sort-order" type="radio" name="order"value="desc" @if(request()->get('order') && request()->get('order') === 'desc') checked @endif>
-                                        <label class="form-check-label ">Descending</label>
-                                    </div>
+                    <form action="{{ route('employees.index') }}">
+                        <div class="row">
+                            <div class="col-4 d-flex justify-content-start">
+                                <div class="py-2 form-inline">
+                                    <span class="text-small pr-2 ">Show </span>
+                                    <input type="number" class="form-control w-25 rounded tbl-pages" id="tbl-pages" name="pages" placeholder="Page" min=10 step=5 value="{{ request()->get('pages') ? request()->get('pages') : 10 }}">
+                                    <span class="text-small pl-2 "> entries </span>
                                 </div>
+                            </div>
+                            <div class="col-8 d-flex justify-content-end">
+                                <div>
+                                    <span class="text-small pr-2 ">Sort by column</span>
+                                    <select class="custom-select form-control tbl-sort-column" name="column">
+                                        @foreach($columns as $item)
+                                            <option value="{{ $item }}" @if(request()->get('column') && request()->get('column') === $item) selected @endif>{{ ucwords(str_replace(['_', 'id'], ' ', $item)) }}</option>
+                                        @endforeach
+                                    </select>
+                                    <div class="col-12 p-0">
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input rounded-0 tbl-sort-order" type="radio" name="order" value="asc" checked>
+                                            <label class="form-check-label">Ascending</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input tbl-sort-order" type="radio" name="order"value="desc" @if(request()->get('order') && request()->get('order') === 'desc') checked @endif>
+                                            <label class="form-check-label ">Descending</label>
+                                        </div>
+                                    </div>
 
-                            </div>
-                            <div class="px-2">
-                                <span class="text-small pr-2 ">Search by keyword</span>
-                                <div class="input-group mb-3">
-                                    <input type="text" class="form-control rounded tbl-keyword-search" id="tbl-keyword-search" name="keyword" placeholder="Type keyword" maxlength=250 value="{{ request()->get('keyword') }}">
-                                    <div class="input-group-append">
-                                        <button class="btn btn-outline-primary rounded mx-2 tbl-filter-btn" type="submit" id="tbl-filter-btn">Apply</button>
-                                        <a href="{{ route('employees.index') }}" class="btn btn-outline-primary rounded tbl-filter-btn" xid="tbl-reset-btn">Reset</a>
+                                </div>
+                                <div class="px-2">
+                                    <span class="text-small pr-2 ">Search by keyword</span>
+                                    <div class="input-group mb-3">
+                                        <input type="text" class="form-control rounded tbl-keyword-search" id="tbl-keyword-search" name="keyword" placeholder="Type keyword" maxlength=250 value="{{ request()->get('keyword') }}">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-primary rounded mx-2 tbl-filter-btn" type="submit" id="tbl-filter-btn">Apply</button>
+                                            <a href="{{ route('employees.index') }}" class="btn btn-outline-primary rounded tbl-filter-btn" xid="tbl-reset-btn">Reset</a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </form>
                     <div class="table-container">
                     @include('employees.partials.datatable')
                     </div>
@@ -79,35 +81,6 @@ $(document).ready(function() {
         ordering: false,
         paging: false,
         searching: false
-    });
-
-    $(document).on('click', '.tbl-filter-btn', function (e) {
-        var sort_col = $('.tbl-sort-column').val();
-        var sort_order = $('.tbl-sort-order:checked').val();
-        var keyword = $('.tbl-keyword-search').val();
-        var pages = $('.tbl-pages').val();
-
-        $.ajax({
-            url: '/filter_employees',
-            async: false,
-            type: "GET",
-            dataType: "json",
-            data: {
-                column: sort_col,
-                order: sort_order,
-                keyword: keyword,
-                pages: pages
-            },
-            crossDomain: true,
-            contentType: 'application/json',
-            success: function(data) {
-                window.location = data.html;
-                $('.table-container').html(data.html);
-            },
-            error: function (data) {
-                console.log('error')
-            }
-        });
     });
 
     $(document).on('click', '.view-action-btn', (e) => {

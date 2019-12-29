@@ -19,11 +19,10 @@ class EmployeesController extends Controller
      */
     public function index(Request $request)
     {
-        if(!empty($request->all())) {
-            $data = $request->all();
-            $pages = isset($data['pages']) ? $data['pages'] : 10;
-            $employees = Employee::filter($data)->paginate($pages);
-            $employees->withPath(preg_replace('/&page=[0-9]*/', '', request()->getRequestUri()));
+        $filters = $request->all();
+        if(!empty($filters)) {
+            $pages = isset($filters['pages']) ? $filters['pages'] : 10;
+            $employees = Employee::filter($filters)->paginate($pages);
         } else {
             $employees = Employee::orderBy('last_name')->paginate(10);
         }
@@ -33,7 +32,8 @@ class EmployeesController extends Controller
         return view('employees.index', compact(
             'employees',
             'columns',
-            'companies'
+            'companies',
+            'filters'
         ));
     }
 
@@ -281,34 +281,7 @@ class EmployeesController extends Controller
         ); 
         
     }
-
-    /**
-     * 
-     * filter data in index table 
-     * 
-     */
-    public function filterTable(Request $request)
-    {
-        
-        try {
-            $data = $request->all();
-            return  [
-                'success' => true,
-                'html' => route('employees.index', $data),
-            ];
-        } catch (\Exception $e) {
-            $message = $e->getMessage();
-            return  [
-                'success' => false,
-            ];
-        }
-
-        return  [
-            'success' => false,
-        ];
-        
-    }
-
+    
     /**
      * For exporting employees data
      */

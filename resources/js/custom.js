@@ -29,6 +29,11 @@ $(document).ready(() => {
         }
     });
 
+    $(document).on('change', 'input.tbl-pages', (e) => {
+        var el = $(e.target);
+        el.closest('form').submit();
+    });
+
    // customization of datatable filter CSS
     $('div.dataTables_wrapper div.dataTables_filter > label > input')
     .css({

@@ -20,7 +20,6 @@ class CreateEmailsTable extends Migration
             $table->string('recipient_name');
             $table->string('recipient_email');
             $table->text('message');
-            $table->dateTime('sent_at')->nullable();
             $table->dateTime('scheduled_at')->nullable();
             $table->timestamps();
         });

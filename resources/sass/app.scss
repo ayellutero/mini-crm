@@ -4,6 +4,12 @@
 // Variables
 @import 'variables';
 
+@import "~bootstrap/scss/functions"; 
+/* change the primary theme color to red */
+$theme-colors: (
+  'info': #17a2b8,
+);
+/* -------end customization-------- */
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
 

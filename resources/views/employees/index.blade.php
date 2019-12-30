@@ -16,9 +16,9 @@
                     </div>
                     @endif
                     @auth('web')
-                    <a href="{{ route('employees.create') }}" class="btn btn-outline-primary mb-3 mr-1 add-item-btn" data-toggle="tooltip" data-placement="bottom" title="Add Employee">Add Employee</a>
+                    <a href="{{ route('employees.create') }}" class="btn btn-outline-info mb-3 mr-1 add-item-btn" data-toggle="tooltip" data-placement="bottom" title="Add Employee">Add Employee</a>
                     @endauth
-                    <button type="button" class="btn btn-outline-primary mb-3" data-toggle="modal" data-target="#export-employees-modal">Export Data</button>
+                    <button type="button" class="btn btn-outline-info mb-3" data-toggle="modal" data-target="#export-employees-modal">Export Data</button>
                     <form @auth('employee') action="{{ route('e.employees.index') }}" @else action="{{ route('employees.index') }}" @endauth>
                         <div class="row">
                             <div class="col-4 d-flex justify-content-start">
@@ -53,8 +53,8 @@
                                     <div class="input-group mb-3">
                                         <input type="text" class="form-control rounded tbl-keyword-search" id="tbl-keyword-search" name="keyword" placeholder="Type keyword" maxlength=250 value="{{ request()->get('keyword') }}">
                                         <div class="input-group-append">
-                                            <button class="btn btn-outline-primary rounded mx-2 tbl-filter-btn" type="submit" id="tbl-filter-btn">Apply</button>
-                                            <a @auth('employee') href="{{ route('e.employees.index') }}" @else href="{{ route('employees.index') }}" @endauth class="btn btn-outline-primary rounded tbl-filter-btn" xid="tbl-reset-btn">Reset</a>
+                                            <button class="btn btn-outline-info rounded mx-2 tbl-filter-btn" type="submit" id="tbl-filter-btn">Apply</button>
+                                            <a @auth('employee') href="{{ route('e.employees.index') }}" @else href="{{ route('employees.index') }}" @endauth class="btn btn-outline-info rounded tbl-filter-btn" xid="tbl-reset-btn">Reset</a>
                                         </div>
                                     </div>
                                 </div>

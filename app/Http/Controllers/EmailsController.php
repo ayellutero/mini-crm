@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\EmailRequest;
 use App\Jobs\SendEmail as JobsSendEmail;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
@@ -13,7 +14,7 @@ class EmailsController extends Controller
         return view('emails.create');
     }
 
-    public function send(Request $request)
+    public function send(EmailRequest $request)
     {
         $data = $request->all();
         $route = '';

@@ -36,8 +36,17 @@ textarea {
                                 <input type="text" aria-label="Email" class="form-control @error('recipient_email') is-invalid @enderror" name="recipient_email" value="{{ old('recipient_email') }}" placeholder="Email">
                             </div>
                         </div>
+                        @if($errors->has('recipient_name') | $errors->has('recipient_email'))
+                        <div class="input-group input-group-sm">
+                            <div class="input-group-prepend bg-white">
+                                <span class="input-group-text bg-white text-white border-white">Recipient</span>
+                            </div>
+                            <input type="text" class="form-control form-control-sm bg-white border-white pt-0 pl-3 pr-0 text-danger font-weight-bold" value="@error('recipient_name') {{ $message }} @enderror" disabled>
+                            <input type="text" class="form-control form-control-sm bg-white border-white pt-0 px-0 text-danger font-weight-bold" value="@error('recipient_email') {{ $message }} @enderror" disabled>
+                        </div>
+                        @endif
 
-                        <div class="form-row my-2">
+                        <div class="form-row @if(!$errors->has('recipient_name') && !$errors->has('recipient_email')) my-2 @endif">
                             <textarea type="text" class="form-control @error('message') is-invalid @enderror" id="message" name="message" value="{{ old('message') }}" placeholder="Type message" maxlength=1000 rows=10></textarea>
                             @error('message')
                                 <span class="invalid-feedback" role="alert">
@@ -46,7 +55,7 @@ textarea {
                             @enderror
                         </div>
 
-                        <div class="form-row my-2">
+                        <div class="form-row mt-2">
                             <div class="input-group">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text">Sender</span>
@@ -55,15 +64,24 @@ textarea {
                                 <input type="text" aria-label="Email" class="form-control @error('sender_email') is-invalid @enderror" name="sender_email" value="{{ old('sender_email') }}" placeholder="Email">
                             </div>
                         </div>
+                        @if($errors->has('sender_name') | $errors->has('sender_email'))
+                        <div class="input-group input-group-sm">
+                            <div class="input-group-prepend bg-white">
+                                <span class="input-group-text bg-white text-white border-white">Sender</span>
+                            </div>
+                            <input type="text" class="form-control form-control-sm bg-white border-white pt-0 pl-3 pr-0 text-danger font-weight-bold" value="@error('sender_name') {{ $message }} @enderror" disabled>
+                            <input type="text" class="form-control form-control-sm bg-white border-white pt-0 px-0 text-danger font-weight-bold" value="@error('sender_email') {{ $message }} @enderror" disabled>
+                        </div>
+                        @endif
                         <input type="hidden" name="scheduled_at">
-                        <hr class="mt-4">
+                        <hr class="@if(!$errors->has('sender_name') && !$errors->has('sender_email')) mt-4 @else mt-0 @endif">
                         <div class="row">
                             <div class="col-4 d-flex justify-content-start">
-                                <a href="#" class="btn btn-outline-primary send-later-btn" data-toggle="modal" data-target="#schedule-email-modal">Send Later</a>
+                                <a href="#" class="btn btn-outline-info send-later-btn" data-toggle="modal" data-target="#schedule-email-modal">Send Later</a>
                             </div>
                             <div class="col-8 d-flex justify-content-end">
                                 <a href="{{ route('employees.index') }}" class="btn btn-outline-secondary">Cancel</a>
-                                <button href="#" class="btn btn-outline-primary ml-2 send-now-btn">Send Now</button>
+                                <button href="#" class="btn btn-outline-info ml-2 send-now-btn">Send Now</button>
                             </div>
                         </div>
                     </form>

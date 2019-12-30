@@ -11,7 +11,7 @@
 @section('content')
 <div class="container-fluid">
     <div class="row justify-content-center">
-        <div class="col-md-10">
+        <div class="col-md-12">
             <div class="card">
                 <div class="card-header">Companies</div>
                 <div class="card-body">
@@ -24,7 +24,7 @@
                     </div>
                     @endif
                     @auth('web')
-                    <a href="{{ route('companies.create') }}" class="btn btn-outline-primary mb-3 add-item-btn" data-toggle="tooltip" data-placement="bottom" title="Add Company">Add Company</a>
+                    <a href="{{ route('companies.create') }}" class="btn btn-outline-info mb-3 add-item-btn" data-toggle="tooltip" data-placement="bottom" title="Add Company">Add Company</a>
                     @endauth
                     <form @auth('employee') action="{{ route('e.companies.index') }}" @else action="{{ route('companies.index') }}" @endauth>
                         <div class="row">
@@ -60,8 +60,8 @@
                                     <div class="input-group mb-3">
                                         <input type="text" class="form-control rounded tbl-keyword-search" id="tbl-keyword-search" name="keyword" placeholder="Type keyword" maxlength=250 value="{{ request()->get('keyword') }}">
                                         <div class="input-group-append">
-                                            <button class="btn btn-outline-primary rounded mx-2 tbl-filter-btn" type="submit" id="tbl-filter-btn">Apply</button>
-                                            <a @auth('employee') href="{{ route('e.companies.index') }}" @else href="{{ route('companies.index') }}" @endauth class="btn btn-outline-primary rounded tbl-filter-btn" xid="tbl-reset-btn">Reset</a>
+                                            <button class="btn btn-outline-info rounded mx-2 tbl-filter-btn" type="submit" id="tbl-filter-btn">Apply</button>
+                                            <a @auth('employee') href="{{ route('e.companies.index') }}" @else href="{{ route('companies.index') }}" @endauth class="btn btn-outline-info rounded tbl-filter-btn" xid="tbl-reset-btn">Reset</a>
                                         </div>
                                     </div>
                                 </div>

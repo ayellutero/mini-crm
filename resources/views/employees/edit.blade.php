@@ -70,7 +70,7 @@
                         <hr class="mt-4">
                         <div class="text-center">
                             <a href="{{ route('employees.index') }}" class="btn btn-outline-secondary">Cancel</a>
-                            <button href="#" class="btn btn-outline-primary m-1 add-attendee-btn">Save</button>
+                            <button href="#" class="btn btn-outline-info m-1 add-attendee-btn">Save</button>
                         </div>
                     </form>
                 </div>

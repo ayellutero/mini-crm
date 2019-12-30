@@ -49,7 +49,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-sm btn-primary export-employees-btn">Export</button>
+                <button type="submit" class="btn btn-sm btn-info export-employees-btn">Export</button>
             </div>
         </form>
         </div>

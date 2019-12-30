@@ -19,7 +19,7 @@
             </div>
             <div class="modal-footer">
                     <button type="button" class="btn btn-secondary cancel-schedule-btn" data-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary set-schedule-btn">Set</button>
+                    <button type="button" class="btn btn-info set-schedule-btn">Set</button>
             </div>
         </div>
     </div>

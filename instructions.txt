@@ -1,0 +1,10 @@
+Instructions for running the project on your machine
+
+In your .env file,
+1. Set APP_NAME=Mini-CRM (or whatever name you'd like).
+2. Set DB_DATABASE, DB_USERNAME, DB_PASSWORD with your database credentials.
+3. Set MAIL_USERNAME, MAIL_PASSWORD with your Mailtrap credentials.
+4. Set key QUEUE_CONNECTION=database.
+
+Then in your console, run "php artisan minicrm:setup" to automatically install dependencies and populate database.
+After the command finishes running, you can either set up a virtual host for your project or just run "php artisan serve"

@@ -44,21 +44,21 @@ class SetupProject extends Command
         
         // run composer install, php artisan key:generate, php artisan migrate, php artisan db:seed, npm install, npm run dev, storage:link
         if ($this->confirm('Do you wish to continue?')) {
-            $commands = ['composer install', 'php artisan key:generate', 'php artisan migrate:fresh', /* 'php artisan db:seed',*/ 'npm install', 'npm run dev', 'php artisan storage:link'];
+            $commands = ['composer install', 'php artisan key:generate', 'php artisan migrate:fresh', 'php artisan db:seed', 'npm install', 'npm run dev', 'php artisan storage:link'];
 
             $bar = $this->output->createProgressBar(count($commands));
 
             $bar->start();
 
             foreach ($commands as $command) {
-                $this->info(PHP_EOL . 'Running ' . $command);
+                $this->info(PHP_EOL . 'Running "' . $command . '"');
                 exec($command);
-                $this->info(PHP_EOL . 'Done.');
+                $this->info('Done.');
                 $bar->advance();
             }
 
             $bar->finish();
-            $this->info('Your project is now ready.');
+            $this->info(PHP_EOL . 'Your project is now ready.');
 
         }
     }

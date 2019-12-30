@@ -28,8 +28,7 @@ class Employee extends Authenticatable
     protected $sortable_dt = [
         'last_name',
         'first_name',
-        'email',
-        'phone'
+        'company_name'
     ];
 
     protected $searchable_dt = [
@@ -78,13 +77,16 @@ class Employee extends Authenticatable
         return $query->where(function ($q) use ($columns, $keyword)  {
             foreach($columns as $col) { // foreach defined searchable column,
                 // search for the given keyword
-                $q = $q->orWhere($col, 'LIKE', '%'. $keyword .'%' );
+                $q = $q->orWhere('employees.'.$col, 'LIKE', '%'. $keyword .'%' );
             }
         })
-        ->orWhereHas('company', function ($q) use ($keyword) {
+        ->orWhereHas('company', function ($q) use ($keyword, $query) {
             // include company name (if employee has company) in searching for the keyword
             $q->where('name', $keyword);
+            $query->join('companies', 'companies.id', 'employees.company_id')->select('employees.*', 'name as company_name');
         })->orderBy($sort_col, $sort_order);
+
+        // dd($query->first());
     }
 
     public function scopeExport($query, $data = null)

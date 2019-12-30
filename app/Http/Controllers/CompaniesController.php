@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Company;
 use App\Http\Requests\CompanyRequest;
+use App\Mail\SendEmail;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class CompaniesController extends Controller
 {
@@ -61,8 +63,16 @@ class CompaniesController extends Controller
         }
         
         // if Company is successfully created,
-        if (Company::create($data)) {
+        if ($company = Company::create($data)) {
             // redirect to Companies index page
+
+            Mail::to('admin@mini-crm.com')->send(new SendEmail([
+                'sender_email' => 'notifications@mini-crm.com',
+                'message' => 'A new company <b>' . $company->name .'</b> has been added to your records.',
+                'sender_name' => 'Mini-CRM Mailer',
+                'recipient_name' => '',
+                'recipient_email' => 'admin@mini-crm.com'
+            ]));
             return redirect()->route('companies.index')->with(
                 'message', [
                     'status' => 'success',

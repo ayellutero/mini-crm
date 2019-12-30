@@ -93,8 +93,8 @@
                                             <!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 10px; padding-left: 10px; padding-top: 10px; padding-bottom: 30px; font-family: Tahoma, Verdana, sans-serif"><![endif]-->
                                             <div style="color:#71777D;font-family:Lato, Tahoma, Verdana, Segoe, sans-serif;line-height:1.5;padding-top:10px;padding-right:10px;padding-bottom:30px;padding-left:10px;">
                                                 <div style="font-size: 12px; line-height: 1.5; color: #71777D; font-family: Lato, Tahoma, Verdana, Segoe, sans-serif; mso-line-height-alt: 18px;">
-                                                    <p style="font-size: 14px; line-height: 1.5; word-break: break-word; mso-line-height-alt: 21px; margin: 0;"><span style="color: #000000; font-size: 14px;"><strong>Hi <span style="font-size: 14px;">{{ $data['recipient_name' ] ?? '' }}</span></strong></span>,</p>
-                                                    <p style="font-size: 14px; line-height: 1.5; word-break: break-word; mso-line-height-alt: 21px; margin: 0;">{{ $data['message'] ?? '' }}</p>
+                                                    <p style="font-size: 14px; line-height: 1.5; word-break: break-word; mso-line-height-alt: 21px; margin: 0;"><span style="color: #000000; font-size: 14px;"><strong>Hi<span style="font-size: 14px;">{{ $data['recipient_name' ] ?? '' }}</span></strong></span></p>
+                                                    <p style="font-size: 14px; line-height: 1.5; word-break: break-word; mso-line-height-alt: 21px; margin: 0;">{!! $data['message'] ?? '' !!}</p>
                                                 </div>
                                             </div>
                                             <!--[if mso]></td></tr></table><![endif]-->

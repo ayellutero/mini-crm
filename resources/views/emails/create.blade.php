@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.admin-app')
 
 @section('styles')
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/datetimepicker@latest/dist/DateTimePicker.min.css" />

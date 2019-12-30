@@ -24,6 +24,6 @@ class EmployeeHomeController extends Controller
      */
     public function index()
     {
-        return view('employees.home');
+        return redirect()->route('e.companies.index');
     }
 }

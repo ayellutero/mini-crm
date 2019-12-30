@@ -12,7 +12,7 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('login');
 })->name('index');
 
 Auth::routes(['register' => false]);

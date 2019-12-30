@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.admin-app')
 
 @section('styles')
 <style>
@@ -9,8 +9,6 @@
 @endsection
 
 @section('content')
-
-{{ request()->route()->getPrefix() }}
 <div class="container-fluid">
     <div class="row justify-content-center">
         <div class="col-md-10">

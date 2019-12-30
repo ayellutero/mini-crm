@@ -40,6 +40,7 @@ class SendEmail implements ShouldQueue
             Mail::to($this->data['recipient_email'])->send(new MailSendEmail($this->data));
         } catch (Exception $e) {
             $message = $e->getMessage();
+            \Log::info($message);
         }
     }
     

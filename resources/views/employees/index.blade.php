@@ -15,9 +15,11 @@
                         </button>
                     </div>
                     @endif
+                    @auth('web')
                     <a href="{{ route('employees.create') }}" class="btn btn-outline-primary mb-3 mr-1 add-item-btn" data-toggle="tooltip" data-placement="bottom" title="Add Employee">Add Employee</a>
+                    @endauth
                     <button type="button" class="btn btn-outline-primary mb-3" data-toggle="modal" data-target="#export-employees-modal">Export Data</button>
-                    <form action="{{ route('employees.index') }}">
+                    <form @auth('employee') action="{{ route('e.employees.index') }}" @else action="{{ route('employees.index') }}" @endauth>
                         <div class="row">
                             <div class="col-4 d-flex justify-content-start">
                                 <div class="py-2 form-inline">
@@ -52,7 +54,7 @@
                                         <input type="text" class="form-control rounded tbl-keyword-search" id="tbl-keyword-search" name="keyword" placeholder="Type keyword" maxlength=250 value="{{ request()->get('keyword') }}">
                                         <div class="input-group-append">
                                             <button class="btn btn-outline-primary rounded mx-2 tbl-filter-btn" type="submit" id="tbl-filter-btn">Apply</button>
-                                            <a href="{{ route('employees.index') }}" class="btn btn-outline-primary rounded tbl-filter-btn" xid="tbl-reset-btn">Reset</a>
+                                            <a @auth('employee') href="{{ route('e.employees.index') }}" @else href="{{ route('employees.index') }}" @endauth class="btn btn-outline-primary rounded tbl-filter-btn" xid="tbl-reset-btn">Reset</a>
                                         </div>
                                     </div>
                                 </div>
@@ -84,10 +86,11 @@ $(document).ready(function() {
     });
 
     $(document).on('click', '.view-action-btn', (e) => {
+        var url = "{{ request()->route()->getPrefix() . '/employees/' }}"
         var id = $(e.target).closest('div').data('id')
         var modal = $('#show-item-modal')
         $.ajax({
-            url: '/employees/' + id,
+            url: url + id,
             async: false,
             type: "GET",
             dataType: "json",
@@ -99,7 +102,7 @@ $(document).ready(function() {
             }
         });
     });
-
+@auth('web')
     $(document).on('click', '.delete-action-btn', (e) => {
         var id = $(e.target).closest('div').data('id')
         var name = $(e.target).closest('div').data('name')
@@ -109,13 +112,14 @@ $(document).ready(function() {
         modal.find('form').attr('action', window.location.origin + '/employees/' + id);
         modal.modal('show')
     });
+@endauth
 
     $('.export-companies').select2({
         multiple: true,
         allowClear: true,
         placeholder: 'Select companies'
     });
-
+    
     $(document).on('change', 'input[name=export_type]', function () {
         var type = $('input[name=export_type]:checked').val();
         if (type === "all") {

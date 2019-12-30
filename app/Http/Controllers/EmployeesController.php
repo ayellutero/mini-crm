@@ -133,6 +133,13 @@ class EmployeesController extends Controller
      */
     public function show($id)
     {
+        $prefix = request()->route()->getPrefix();
+        if(isset($prefix) && $id === 'create') {
+            // just to make sure that when an employee tries to access create page,
+            // employee will be redirected to home page
+            return redirect()->route('e.home');
+        }
+
         try {
             $employee = Employee::find($id);
             // render partial page to be used in a modal for viewing employee information
@@ -149,6 +156,7 @@ class EmployeesController extends Controller
             ];
         }
 
+        
         return  [
             'success' => false,
         ];

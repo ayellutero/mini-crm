@@ -32,6 +32,8 @@ window.minMaxTimePlugin = minMaxTimePlugin;
 import confirmDatePlugin from 'flatpickr/dist/plugins/confirmDate/confirmDate.js';
 window.confirmDatePlugin = confirmDatePlugin;
 
+require('overlayscrollbars');
+require('../../node_modules/admin-lte/dist/js/adminlte');
 
 /**
  * Echo exposes an expressive API for subscribing to channels and listening

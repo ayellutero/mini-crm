@@ -9,6 +9,8 @@
 @endsection
 
 @section('content')
+
+{{ request()->route()->getPrefix() }}
 <div class="container-fluid">
     <div class="row justify-content-center">
         <div class="col-md-10">
@@ -23,8 +25,10 @@
                         </button>
                     </div>
                     @endif
+                    @auth('web')
                     <a href="{{ route('companies.create') }}" class="btn btn-outline-primary mb-3 add-item-btn" data-toggle="tooltip" data-placement="bottom" title="Add Company">Add Company</a>
-                    <form action="{{ route('companies.index') }}">
+                    @endauth
+                    <form @auth('employee') action="{{ route('e.companies.index') }}" @else action="{{ route('companies.index') }}" @endauth>
                         <div class="row">
                             <div class="col-4 d-flex justify-content-start">
                                 <div class="py-2 form-inline">
@@ -59,7 +63,7 @@
                                         <input type="text" class="form-control rounded tbl-keyword-search" id="tbl-keyword-search" name="keyword" placeholder="Type keyword" maxlength=250 value="{{ request()->get('keyword') }}">
                                         <div class="input-group-append">
                                             <button class="btn btn-outline-primary rounded mx-2 tbl-filter-btn" type="submit" id="tbl-filter-btn">Apply</button>
-                                            <a href="{{ route('companies.index') }}" class="btn btn-outline-primary rounded tbl-filter-btn" xid="tbl-reset-btn">Reset</a>
+                                            <a @auth('employee') href="{{ route('e.companies.index') }}" @else href="{{ route('companies.index') }}" @endauth class="btn btn-outline-primary rounded tbl-filter-btn" xid="tbl-reset-btn">Reset</a>
                                         </div>
                                     </div>
                                 </div>
@@ -90,10 +94,11 @@ $(document).ready(() => {
     });
 
     $(document).on('click', '.view-action-btn', (e) => {
+        var url = "{{ request()->route()->getPrefix() . '/companies/' }}"
         var id = $(e.target).closest('div').data('id')
         var modal = $('#show-item-modal')
         $.ajax({
-            url: '/companies/' + id,
+            url: url + id,
             async: false,
             type: "GET",
             data: { id: id },
@@ -106,7 +111,7 @@ $(document).ready(() => {
             }
         });
     });
-
+@auth('web')
     $(document).on('click', '.delete-action-btn', (e) => {
         var id = $(e.target).closest('div').data('id')
         var name = $(e.target).closest('div').data('name')
@@ -116,6 +121,7 @@ $(document).ready(() => {
         modal.find('form').attr('action', window.location.origin + '/companies/' + id);
         modal.modal('show')
     });
+@endauth
 });
 </script>
 @endsection

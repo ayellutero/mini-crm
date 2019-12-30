@@ -20,8 +20,10 @@
                 <td>
                     <div data-id="{{ $item->id }}" data-name="{{ $item->full_name }}">
                         <a href="#" class="btn btn-sm py-0 view-action-btn" data-toggle="tooltip" data-placement="bottom" title="View"><i class="far fa-eye"></i></a>
+                    @auth('web')
                         <a href="{{ route('employees.edit', $item->id) }}" class="btn btn-sm py-0 edit-action-btn" data-toggle="tooltip" data-placement="bottom" title="Edit"><i class="far fa-edit"></i></a>
                         <a href="#" class="btn btn-sm py-0 delete-action-btn" data-toggle="tooltip" data-placement="bottom" title="Delete"><i class="far fa-trash-alt"></i></a>
+                    @endauth
                     </div>
                 </td>
             </tr>

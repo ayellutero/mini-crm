@@ -25,7 +25,7 @@ textarea {
                         </button>
                     </div>
                     @endif
-                    <form class="form-horizontal" role="form" method="POST" action="{{ route('emails.send') }}" enctype="multipart/form-data" id="send-email-form">
+                    <form class="form-horizontal" role="form" method="POST" @auth('employee') action="{{ route('e.emails.send') }}" @else action="{{ route('emails.send') }}" @endauth enctype="multipart/form-data" id="send-email-form">
                     @csrf
                         <div class="form-row">
                             <div class="input-group">

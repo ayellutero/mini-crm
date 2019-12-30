@@ -18,25 +18,14 @@ class RedirectIfAuthenticated
      */
     public function handle($request, Closure $next, $guard = null)
     {
-        if (Auth::guard($guard)->check()) {
-            // \Log::info(RouteServiceProvider::HOME);
-            // foreach(config('auth.guards') as $key => $value) {
-            //     if ($key === $guard) {
-            //     \Log::info($key .':' . $guard . ' => ' . $value['redirectTo']);
-            //     return redirect()->route($value['redirectTo']);
-            //     }
-            // }
-
-            // \Log::info($guard . ' => ' . config('auth.guards.employee.customRedirect'));
-            // \Log::info(config('auth.guards')['web']['customRedirect']);
-
-            if (array_key_exists('customRedirect', config('auth.guards.' . $guard))) {
-                // dd(config('auth.guards.'.$guard.'customRedirect'));
-                return redirect()->route(config('auth.guards.' . $guard . '.customRedirect'));
-            }
-
-            // return redirect(RouteServixceProvider::HOME);
+        if (Auth::guard('web')->check() && !Auth::guard('employee')->check()) {
+            // prevent admin from accessing employee login when logged in
+            return redirect(RouteServiceProvider::HOME);
+        } else if (Auth::guard('employee')->check() && !Auth::guard('web')->check()) {
+            // prevent employee from accessing admin login when logged in
+            return redirect()->route(config('auth.guards.employee.customRedirect'));
         }
+
 
         return $next($request);
     }

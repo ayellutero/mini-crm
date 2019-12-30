@@ -1,7 +1,7 @@
 <div class="modal fade" id="export-employees-modal" tabindex="-1" role="dialog" aria-spanledby="export-employees-modal-title" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
-        <form class="form-horizontal" role="form" method="GET" action="{{ route('employees.export') }}" enctype="multipart/form-data" id="add_employee_form">
+        <form class="form-horizontal" role="form" method="GET" @auth('employee') action="{{ route('e.employees.export') }}" @else action="{{ route('employees.export') }}" @endauth enctype="multipart/form-data" id="add_employee_form">
             <div class="modal-header pb-2 border-0">
                 <span class="d-block h5 text-uppercase font-weight-bold company-name" id="company-name">Export employees</span>
             </div>

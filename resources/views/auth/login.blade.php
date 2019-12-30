@@ -75,8 +75,18 @@
       </form>
 
       <div class="social-auth-links text-center m-0">
-        <p>- OR -</p>
-        <a href="{{ route('e.login') }}" class="btn btn-block btn-outline-primary">
+        <div class="col-12 d-flex justify-content-center">
+            <div class="col">
+                <hr>
+            </div>
+            <div class="flex-shrink-1 mt-1">
+                <span class="text-small">OR</span>
+            </div>
+            <div class="col">
+                <hr>
+            </div>
+        </div>
+        <a href="{{ route('e.login') }}" class="btn btn-block btn-outline-info">
           <i class="fas fa-user mr-2"></i> Sign in as Employee
         </a>
       </div>
@@ -84,7 +94,7 @@
 
       <p class="mb-1">
         @if (Route::has('password.request'))
-            <a class="btn btn-sm btn-link pl-0 text-small" href="{{ route('password.request') }}">
+            <a class="btn btn-sm btn-link text-info pl-0 text-small" href="{{ route('password.request') }}">
                 {{ __('Forgot Your Password?') }}
             </a>
         @endif

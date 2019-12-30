@@ -80,7 +80,6 @@ textarea {
                                 <a href="#" class="btn btn-outline-info send-later-btn" data-toggle="modal" data-target="#schedule-email-modal">Send Later</a>
                             </div>
                             <div class="col-8 d-flex justify-content-end">
-                                <a href="{{ route('employees.index') }}" class="btn btn-outline-secondary">Cancel</a>
                                 <button href="#" class="btn btn-outline-info ml-2 send-now-btn">Send Now</button>
                             </div>
                         </div>

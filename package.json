@@ -24,7 +24,7 @@
     },
     "dependencies": {
         "admin-lte": "^3.0.1",
-        "datatables.net": "^1.10.20",
+        "datatables.net": "^1.10.22",
         "datatables.net-bs4": "^1.10.20",
         "flatpickr": "^4.6.3",
         "font-awesome": "^4.7.0",

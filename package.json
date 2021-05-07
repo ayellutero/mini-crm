@@ -30,6 +30,6 @@
         "font-awesome": "^4.7.0",
         "overlayscrollbars": "^1.10.0",
         "select2": "^4.0.12",
-        "underscore": "^1.9.1"
+        "underscore": "^1.12.1"
     }
 }
